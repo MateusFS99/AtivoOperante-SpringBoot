@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Módulo de Denúncias</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    	<link href="https://getbootstrap.com.br/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+      		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        		<a class="navbar-brand" href="index">Home</a>
+        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          			<span class="navbar-toggler-icon"></span>
+        		</button>
+        		<div class="collapse navbar-collapse" id="navbarCollapse">
+          			<ul class="navbar-nav mr-auto">
+            			<li class="nav-item">
+              				<a class="nav-link" href="denuncias">Denúncias</a>
+            			</li>
+            			<li class="nav-item">
+              				<a class="nav-link" href="orgaos">Órgãos</a>
+            			</li>
+            			<li class="nav-item">
+              				<a class="nav-link" href="tipos">Tipos de Problemas</a>
+            			</li>
+          			</ul>
+        		</div>
+      		</nav>
+    	</header>
+    	
+    	<main role="main" class="flex-shrink-0">
+      		<div class="panel panel-default" style="margin: 100px">
+				<div class="panel-heading">
+					<h1 class="panel-title">Lista de Denúncias</h1>
+					<div class="form-group">
+						<input id="filtro" type="text" size="100" th:object="${filtro}" th:value="${filtro}" class="form-control" placeholder="Filtro de busca:"/>
+					</div>	
+					<button onclick="window.location.replace('/fildenuncias?filtro='+filtro.value);" class="btn btn-primary" >Filtrar</button><br>
+				</div>
+				<div class="panel-body" style="margin-top: 20px">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Titulo</th>
+								<th>Descrição</th>
+								<th>Urgência</th>
+								<th>Orgão</th>
+								<th>Tipo</th>
+								<th>Usuário</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="denuncia : ${denuncias}">
+								<td th:text="${denuncia.titulo}"></td>
+								<td th:text="${denuncia.descricao}"></td>
+								<td th:text="${denuncia.urgencia}"></td>
+								<td th:text="${denuncia.orgao.nome}"></td>
+								<td th:text="${denuncia.tipo.nome}"></td>
+								<td th:text="${denuncia.login.email}"></td>
+								<td><a th:href="@{/excdenuncias(id=${denuncia.id})}"><img src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjUxMnB0IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgd2lkdGg9IjUxMnB0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im0yNTYgMGMtMTQxLjE2NDA2MiAwLTI1NiAxMTQuODM1OTM4LTI1NiAyNTZzMTE0LjgzNTkzOCAyNTYgMjU2IDI1NiAyNTYtMTE0LjgzNTkzOCAyNTYtMjU2LTExNC44MzU5MzgtMjU2LTI1Ni0yNTZ6bTAgMCIgZmlsbD0iI2Y0NDMzNiIvPjxwYXRoIGQ9Im0yNTYgNTEyYy0xNDEuMTY0MDYyIDAtMjU2LTExNC44MzU5MzgtMjU2LTI1NnMxMTQuODM1OTM4LTI1NiAyNTYtMjU2IDI1NiAxMTQuODM1OTM4IDI1NiAyNTYtMTE0LjgzNTkzOCAyNTYtMjU2IDI1NnptMC00ODBjLTEyMy41MTk1MzEgMC0yMjQgMTAwLjQ4MDQ2OS0yMjQgMjI0czEwMC40ODA0NjkgMjI0IDIyNCAyMjQgMjI0LTEwMC40ODA0NjkgMjI0LTIyNC0xMDAuNDgwNDY5LTIyNC0yMjQtMjI0em0wIDAiLz48cGF0aCBkPSJtMTc2LjgxMjUgMzUxLjIxMDkzOGMtNC4wOTc2NTYgMC04LjE5NTMxMi0xLjU1ODU5NC0xMS4zMDg1OTQtNC42OTUzMTMtNi4yNS02LjI1LTYuMjUtMTYuMzgyODEzIDAtMjIuNjMyODEzbDE1OC4zOTg0MzgtMTU4LjM5ODQzN2M2LjI1MzkwNi02LjI1MzkwNiAxNi4zODY3MTgtNi4yNTM5MDYgMjIuNjM2NzE4IDAgNi4yNSA2LjI1IDYuMjUgMTYuMzgyODEzIDAgMjIuNjMyODEzbC0xNTguNDAyMzQzIDE1OC4zOTg0MzdjLTMuMTU2MjUgMy4xMzY3MTktNy4yNSA0LjY5NTMxMy0xMS4zMjQyMTkgNC42OTUzMTN6bTAgMCIvPjxwYXRoIGQ9Im0zMzUuMTg3NSAzNTEuMjEwOTM4Yy00LjA5Mzc1IDAtOC4xOTE0MDYtMS41NTg1OTQtMTEuMzA0Njg4LTQuNjk1MzEzbC0xNTguMzk4NDM3LTE1OC4zOTg0MzdjLTYuMjUzOTA2LTYuMjUtNi4yNTM5MDYtMTYuMzgyODEzIDAtMjIuNjMyODEzIDYuMjUtNi4yNTM5MDYgMTYuMzgyODEzLTYuMjUzOTA2IDIyLjYzMjgxMyAwbDE1OC4zOTg0MzcgMTU4LjM5ODQzN2M2LjI1MzkwNiA2LjI1IDYuMjUzOTA2IDE2LjM4MjgxMyAwIDIyLjYzMjgxMy0zLjEzMjgxMyAzLjEzNjcxOS03LjIzMDQ2OSA0LjY5NTMxMy0xMS4zMjgxMjUgNC42OTUzMTN6bTAgMCIvPjwvc3ZnPg==" width="24" height="24"/></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+    	</main>
+    	
+    	<footer class="footer mt-auto py-3">
+      		<div class="container">
+        		<span class="text-muted">Mateus Fonseca Santos - Victor Gabriel Viana Da Costa</span>
+      		</div>
+    	</footer>
+    	
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</body>
+</html>

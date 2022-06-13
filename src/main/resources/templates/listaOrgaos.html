@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Módulo de Órgãos</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    	<link href="https://getbootstrap.com.br/docs/4.1/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+      		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        		<a class="navbar-brand" href="index">Home</a>
+        		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          			<span class="navbar-toggler-icon"></span>
+        		</button>
+        		<div class="collapse navbar-collapse" id="navbarCollapse">
+          			<ul class="navbar-nav mr-auto">
+            			<li class="nav-item">
+              				<a class="nav-link" href="denuncias">Denúncias</a>
+            			</li>
+            			<li class="nav-item">
+              				<a class="nav-link" href="orgaos">Órgãos</a>
+            			</li>
+            			<li class="nav-item">
+              				<a class="nav-link" href="tipos">Tipos de Problemas</a>
+            			</li>
+          			</ul>
+        		</div>
+      		</nav>
+    	</header>
+    	
+    	<main role="main" class="flex-shrink-0">
+    		<div class="panel panel-default" style="margin: 100px">
+				<div class="panel-heading">
+					<h2 class="panel-title">Adicionar novo Órgão</h2>
+				</div>
+				<div class="panel-body">
+					<form method="POST" th:action="@{/saveorgaos}" style="margin: 20px 0" th:object="${novo}">
+		 			    <input type="hidden" class="form-control" th:field="*{id}" />
+						<div class="form-group">
+							<label for="nome">Nome:</label> 
+							<input type="text" class="form-control" th:field="*{nome}" />
+						</div>
+						<button type="submit" class="btn btn-primary">Adicionar</button>
+					</form>
+				</div>
+				<div th:text="${mensagem}" th:style="|text-aligment:center; background:${mensagem.cor}|"></div>
+			</div>
+	
+      		<div class="panel panel-default" style="margin: 100px">
+				<div class="panel-heading">
+					<h1 class="panel-title">Lista de Órgãos</h1>
+					<div class="form-group">
+						<input id="filtro" type="text" size="100" th:object="${filtro}" th:value="${filtro}" class="form-control" placeholder="Filtro de busca:"/>
+					</div>
+					<button onclick="window.location.replace('/filorgaos?filtro='+filtro.value);" class="btn btn-primary">Filtrar</button><br>
+				</div>
+				<div class="panel-body" style="margin-top: 20px">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Nome</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="orgao : ${orgaos}">
+								<td th:text="${orgao.nome}"></td>
+								<td><a th:href="@{/altorgaos(id=${orgao.id})}"><img src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjUxMnB0IiB2aWV3Qm94PSItMzIgMCA1MTIgNTEyIiB3aWR0aD0iNTEycHQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0ibTM2OS40ODQzNzUgOTYuNzY1NjI1LTg1LjAxOTUzMS04NS4wMjM0MzdjLTcuNzkyOTY5LTcuNzkyOTY5LTE1Ljg1OTM3NS0xMS43NDIxODgtMjMuOTc2NTYzLTExLjc0MjE4OC0xMi4zODI4MTIgMC0yNC44ODI4MTIgOS44OTA2MjUtMjQuODgyODEyIDMxLjk4MDQ2OXYyMy4zNzg5MDZjLTEyMC43MTA5MzggNy4xMjg5MDYtMjIwLjY0MDYyNSA5OS43NjU2MjUtMjM1LjQ5MjE4OCAyMjEuMDUwNzgxLS44MzIwMzEgNi43NzM0MzggMy4wMTk1MzEgMTMuMjU3ODEzIDkuMzY3MTg4IDE1Ljc2OTUzMiAxLjc5Njg3NS43MTA5MzcgMy42Njc5NjkgMS4wNTQ2ODcgNS41MTU2MjUgMS4wNTQ2ODcgNC42Nzk2ODcgMCA5LjIxODc1LTIuMTkxNDA2IDEyLjEwOTM3NS02LjE0MDYyNSAzOS44MzU5MzctNTQuNDI5Njg4IDEwMy43OTY4NzUtODYuOTI1NzgxIDE3MS4wOTM3NS04Ni45MjU3ODEgMTIuNDcyNjU2IDAgMjUuMDA3ODEyIDEuMTI1IDM3LjQwNjI1IDMuMzUxNTYydjI1Ljc0MjE4OGMwIDguMTc1NzgxIDEuNjM2NzE5IDE1LjAzNTE1NiA0Ljg1NTQ2OSAyMC4zNzg5MDYgNC40NDUzMTIgNy4zNzUgMTEuNzQyMTg3IDExLjYwMTU2MyAyMC4wMjczNDMgMTEuNjAxNTYzIDguMTE3MTg4IDAgMTYuMTgzNTk0LTMuOTUzMTI2IDIzLjk3NjU2My0xMS43NDIxODhsODUuMDE5NTMxLTg1LjAyMzQzOGMxOC42Njc5NjktMTguNjY3OTY4IDE4LjY2Nzk2OS00OS4wNDY4NzQgMC02Ny43MTA5Mzd6bTAgMCIgZmlsbD0iIzAwZDhlMCIvPjxwYXRoIGQ9Im00MzguMjU3ODEyIDIxOS44MjAzMTJjLTYuMzUxNTYyLTIuNTExNzE4LTEzLjU5Mzc1LS40MTc5NjgtMTcuNjI1IDUuMDg5ODQ0LTM5LjgzNTkzNyA1NC40MjU3ODItMTAzLjc5Njg3NCA4Ni45MjE4NzUtMTcxLjA5Mzc1IDg2LjkyMTg3NS0xMi40Njg3NSAwLTI1LjAwMzkwNi0xLjEyNS0zNy40MDYyNS0zLjM1MTU2MnYtMjUuNzQyMTg4YzAtMjIuMDg5ODQzLTEyLjQ5NjA5My0zMS45ODA0NjktMjQuODgyODEyLTMxLjk4MDQ2OS04LjExNzE4OCAwLTE2LjE4MzU5NCAzLjk1MzEyNi0yMy45NzI2NTYgMTEuNzQ2MDk0bC04NS4wMjM0MzggODUuMDE5NTMyYy0xOC42Njc5NjggMTguNjY3OTY4LTE4LjY2Nzk2OCA0OS4wNDI5NjggMCA2Ny43MTQ4NDNsODUuMDIzNDM4IDg1LjAxOTUzMWM3Ljc4OTA2MiA3Ljc5Mjk2OSAxNS44NTU0NjggMTEuNzQyMTg4IDIzLjk3MjY1NiAxMS43NDIxODggMTIuMzg2NzE5IDAgMjQuODgyODEyLTkuODkwNjI1IDI0Ljg4MjgxMi0zMS45ODA0Njl2LTIzLjM3ODkwNmMxMjAuNzE0ODQ0LTcuMTI4OTA2IDIyMC42NDQ1MzItOTkuNzY1NjI1IDIzNS40OTIxODgtMjIxLjA0Njg3NS44MzIwMzEtNi43NzczNDQtMy4wMTk1MzEtMTMuMjYxNzE5LTkuMzY3MTg4LTE1Ljc3MzQzOHptMCAwIiBmaWxsPSIjNTRlMzYwIi8+PHBhdGggZD0ibTIzNS42MDU0NjkgMjI5LjI2MTcxOWMwIDguMTc1NzgxIDEuNjM2NzE5IDE1LjAzNTE1NiA0Ljg1NTQ2OSAyMC4zNzg5MDYgNC40NDUzMTIgNy4zNzUgMTEuNzQyMTg3IDExLjYwMTU2MyAyMC4wMjczNDMgMTEuNjAxNTYzIDguMTE3MTg4IDAgMTYuMTgzNTk0LTMuOTUzMTI2IDIzLjk3NjU2My0xMS43NDIxODhsODUuMDE5NTMxLTg1LjAyMzQzOGMxOC42Njc5NjktMTguNjY3OTY4IDE4LjY2Nzk2OS00OS4wNDI5NjggMC02Ny43MTA5MzdsLTg1LjAxOTUzMS04NS4wMjM0MzdjLTcuNzkyOTY5LTcuNzkyOTY5LTE1Ljg1OTM3NS0xMS43NDIxODgtMjMuOTc2NTYzLTExLjc0MjE4OC0xMi4zODI4MTIgMC0yNC44ODI4MTIgOS44OTA2MjUtMjQuODgyODEyIDMxLjk4MDQ2OXYyMy4zNzg5MDZjLTMuOTMzNTk0LjIzNDM3NS03Ljg0NzY1Ny41NjI1LTExLjczODI4MS45NzY1NjN2MTQ1LjQyMTg3NGMzLjkyMTg3NC40ODQzNzYgNy44Mzk4NDMgMS4wNjI1IDExLjczODI4MSAxLjc2MTcxOXptMCAwIiBmaWxsPSIjMDBhY2IzIi8+PHBhdGggZD0ibTQzOC4yNTc4MTIgMjE5LjgyMDMxMmMtNi4zNTE1NjItMi41MTE3MTgtMTMuNTkzNzUtLjQxNzk2OC0xNy42MjUgNS4wODk4NDQtMzkuODM1OTM3IDU0LjQyNTc4Mi0xMDMuNzk2ODc0IDg2LjkyMTg3NS0xNzEuMDkzNzUgODYuOTIxODc1LTguNTQ2ODc0IDAtMTcuMTI1LS41NDI5NjktMjUuNjcxODc0LTEuNTg5ODQzdjE0NS40MjE4NzRjMTE1LjQwMjM0My0xMi4yMjY1NjIgMjA5LjM5MDYyNC0xMDIuNzQyMTg3IDIyMy43NTc4MTItMjIwLjA3MDMxMi44MzIwMzEtNi43NzczNDQtMy4wMTk1MzEtMTMuMjYxNzE5LTkuMzY3MTg4LTE1Ljc3MzQzOHptMCAwIiBmaWxsPSIjMDBhYjVlIi8+PC9zdmc+" width="24" height="24"/></a></td>
+								<td><a th:href="@{/excorgaos(id=${orgao.id})}"><img src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjUxMnB0IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgd2lkdGg9IjUxMnB0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im0yNTYgMGMtMTQxLjE2NDA2MiAwLTI1NiAxMTQuODM1OTM4LTI1NiAyNTZzMTE0LjgzNTkzOCAyNTYgMjU2IDI1NiAyNTYtMTE0LjgzNTkzOCAyNTYtMjU2LTExNC44MzU5MzgtMjU2LTI1Ni0yNTZ6bTAgMCIgZmlsbD0iI2Y0NDMzNiIvPjxwYXRoIGQ9Im0yNTYgNTEyYy0xNDEuMTY0MDYyIDAtMjU2LTExNC44MzU5MzgtMjU2LTI1NnMxMTQuODM1OTM4LTI1NiAyNTYtMjU2IDI1NiAxMTQuODM1OTM4IDI1NiAyNTYtMTE0LjgzNTkzOCAyNTYtMjU2IDI1NnptMC00ODBjLTEyMy41MTk1MzEgMC0yMjQgMTAwLjQ4MDQ2OS0yMjQgMjI0czEwMC40ODA0NjkgMjI0IDIyNCAyMjQgMjI0LTEwMC40ODA0NjkgMjI0LTIyNC0xMDAuNDgwNDY5LTIyNC0yMjQtMjI0em0wIDAiLz48cGF0aCBkPSJtMTc2LjgxMjUgMzUxLjIxMDkzOGMtNC4wOTc2NTYgMC04LjE5NTMxMi0xLjU1ODU5NC0xMS4zMDg1OTQtNC42OTUzMTMtNi4yNS02LjI1LTYuMjUtMTYuMzgyODEzIDAtMjIuNjMyODEzbDE1OC4zOTg0MzgtMTU4LjM5ODQzN2M2LjI1MzkwNi02LjI1MzkwNiAxNi4zODY3MTgtNi4yNTM5MDYgMjIuNjM2NzE4IDAgNi4yNSA2LjI1IDYuMjUgMTYuMzgyODEzIDAgMjIuNjMyODEzbC0xNTguNDAyMzQzIDE1OC4zOTg0MzdjLTMuMTU2MjUgMy4xMzY3MTktNy4yNSA0LjY5NTMxMy0xMS4zMjQyMTkgNC42OTUzMTN6bTAgMCIvPjxwYXRoIGQ9Im0zMzUuMTg3NSAzNTEuMjEwOTM4Yy00LjA5Mzc1IDAtOC4xOTE0MDYtMS41NTg1OTQtMTEuMzA0Njg4LTQuNjk1MzEzbC0xNTguMzk4NDM3LTE1OC4zOTg0MzdjLTYuMjUzOTA2LTYuMjUtNi4yNTM5MDYtMTYuMzgyODEzIDAtMjIuNjMyODEzIDYuMjUtNi4yNTM5MDYgMTYuMzgyODEzLTYuMjUzOTA2IDIyLjYzMjgxMyAwbDE1OC4zOTg0MzcgMTU4LjM5ODQzN2M2LjI1MzkwNiA2LjI1IDYuMjUzOTA2IDE2LjM4MjgxMyAwIDIyLjYzMjgxMy0zLjEzMjgxMyAzLjEzNjcxOS03LjIzMDQ2OSA0LjY5NTMxMy0xMS4zMjgxMjUgNC42OTUzMTN6bTAgMCIvPjwvc3ZnPg==" width="24" height="24"/></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+    	</main>
+    	
+    	<footer class="footer mt-auto py-3">
+      		<div class="container">
+        		<span class="text-muted">Mateus Fonseca Santos - Victor Gabriel Viana Da Costa</span>
+      		</div>
+    	</footer>
+    	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</body>
+</html>
